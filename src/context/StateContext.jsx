@@ -40,8 +40,6 @@ const StateContextProvider = ({children}) => {
 
                 const response = await signInWithPopup(auth, provider);
     
-    
-    
                 const user = response.user;
     
                 // // //getting user doc reference
