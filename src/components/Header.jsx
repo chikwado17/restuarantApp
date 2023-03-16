@@ -9,7 +9,7 @@ import { useStateValue } from '../context/StateContext';
 
 const Header = () => {
 
-  const { login, user, loading, isMenu, logout} = useStateValue();
+  const { login, user, loading, isMenu, logout, setIsMenu} = useStateValue();
 
 
   return (
@@ -23,6 +23,7 @@ const Header = () => {
 
 
           <div className='flex items-center gap-8'>
+         
                 <ul className='flex items-center gap-8'>
                     <motion.li whileTap={{scale:0.6}} className='text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer'>Home</motion.li>
                     <motion.li whileTap={{scale:0.6}} className='text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer'>Menu</motion.li>
@@ -39,8 +40,10 @@ const Header = () => {
 
 
             {!loading &&
-              <div className='relative'>
-              
+      <div className="relative">
+     
+                   
+               
               <motion.img whileTap={{scale:0.6}} onClick={login} src={user ? user?.photoURL : Avatar}  alt="userProfile" className='rounded-full w-10 min-w-[40px] min-h-[40px] drop-shadow-xl cursor-pointer' />
           
                {isMenu && (
@@ -49,10 +52,14 @@ const Header = () => {
                     animate={{opacity: 1, scale: 1}}
                     exit={{opacity: 0, scale: 0.5}}
 
-                    className='w-40 bg-gray-50 shadow-xl rounded-lg flex flex-col absolute top-12 right-0'>
+                    className='w-40 bg-gray-50 shadow-xl rounded-lg flex flex-col absolute top-12 right-0 z-50  my-4 text-base list-none  divide-y divide-gray-100  dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown"'>
+                    <div className="px-4 py-3">
+                        <span className="block text-sm text-gray-900 dark:text-white">{user?.displayName}</span>
+                        <span className="block text-sm font-medium text-gray-500 truncate dark:text-gray-400">{user?.email}</span>
+                    </div>
                     {user && user.email === 'chikwadonworie@gmail.com' && (
                         <Link to={'/createItem'}>
-                              <p className='px-4 py-2 flex items-center gap-3 cursor-pointer hover:bg-slate-100 transition-all duration-100 ease-out text-textColor text-base'>New Item <MdAdd/></p>
+                              <p onClick={() => setIsMenu(false)} className='px-4 py-2 flex items-center gap-3 cursor-pointer hover:bg-slate-100 transition-all duration-100 ease-out text-textColor text-base'>New Item <MdAdd/></p>
                         </Link>
                     ) }
                     <p onClick={logout} className='px-4 py-2 flex items-center gap-3 cursor-pointer hover:bg-slate-100 transition-all duration-100 ease-out text-textColor text-base'>Logout <MdLogout /></p>
@@ -90,18 +97,22 @@ const Header = () => {
                         animate={{opacity: 1, scale: 1}}
                         exit={{opacity: 0, scale: 0.5}}
 
-                        className='w-40 bg-gray-50 shadow-xl rounded-lg flex flex-col absolute top-12 right-0'>
+                        className='w-40 bg-gray-50 shadow-xl rounded-lg flex flex-col absolute top-12 right-0 z-50  my-4 text-base list-none  divide-y divide-gray-100  dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown"'>
+                              <div className="px-4 py-3">
+                                <span className="block text-sm text-gray-900 dark:text-white">{user?.displayName}</span>
+                                <span className="block text-sm font-medium text-gray-500 truncate dark:text-gray-400">{user?.email}</span>
+                            </div>
                         {user && user.email === 'chikwadonworie@gmail.com' && (
                             <Link to={'/createItem'}>
-                                  <p className='px-4 py-2 flex items-center gap-3 cursor-pointer hover:bg-slate-100 transition-all duration-100 ease-out text-textColor text-base'>New Item <MdAdd/></p>
+                                  <p onClick={() => setIsMenu(false)}  className='px-4 py-2 flex items-center gap-3 cursor-pointer hover:bg-slate-100 transition-all duration-100 ease-out text-textColor text-base'>New Item <MdAdd/></p>
                             </Link>
                         ) }
 
                         <ul className='flex flex-col'>
-                            <li className='hover:bg-slate-100 px-4 py-2 text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer'>Home</li>
-                            <li className='hover:bg-slate-100 px-4 py-2 text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer'>Menu</li>
-                            <li className='hover:bg-slate-100 px-4 py-2 text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer'>About Us</li>
-                            <li className='hover:bg-slate-100 px-4 py-2 text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer'>Services</li>
+                            <li onClick={() => setIsMenu(false)} className='hover:bg-slate-100 px-4 py-2 text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer'>Home</li>
+                            <li onClick={() => setIsMenu(false)} className='hover:bg-slate-100 px-4 py-2 text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer'>Menu</li>
+                            <li onClick={() => setIsMenu(false)} className='hover:bg-slate-100 px-4 py-2 text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer'>About Us</li>
+                            <li onClick={() => setIsMenu(false)} className='hover:bg-slate-100 px-4 py-2 text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer'>Services</li>
                         </ul>
                         <p onClick={logout} className='m-2 p-2 flex items-center justify-center bg-red-700 rounded-md shadow-lg text-cyan-50 gap-3 cursor-pointer hover:bg-red-800 transition-all duration-100 ease-out text-base'>Logout <MdLogout /></p>
                   </motion.div>

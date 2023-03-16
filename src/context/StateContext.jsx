@@ -2,11 +2,11 @@ import React, { createContext, useContext, useReducer, useEffect, useState } fro
 
 import { getAuth, signInWithPopup, GoogleAuthProvider,onAuthStateChanged, signOut } from 'firebase/auth';
 import { db } from '../firebase';
-import { doc, setDoc, getDoc } from "firebase/firestore"; 
+import { doc, setDoc, getDoc, getDocs, collection, query, orderBy } from "firebase/firestore"; 
 import { app } from "../firebase";
 
 
-import { SET_USER, SIGN_OUT } from './initialTypes';
+import { FETCH_ITEMS, SET_USER, SIGN_OUT } from './initialTypes';
 import { initialState } from './initialState';
 import  reducer  from './reducer';
 
@@ -15,22 +15,17 @@ import  reducer  from './reducer';
 
 const StateContext = createContext();
 
-
-
 const StateContextProvider = ({children}) => {
     const [loading, setLoading] = useState(true);
     const [isMenu, setIsMenu] = useState(false);
 
     const auth = getAuth(app);
 
-   
 
     const [state, dispatch] = useReducer(reducer, initialState );
 
-   
     const provider = new GoogleAuthProvider();
 
-    
 
     //function to handle google login authentication by popup
     const login = async () => {
@@ -59,8 +54,7 @@ const StateContextProvider = ({children}) => {
                 }
     
                 dispatch({
-                    type: SET_USER,
-                    payload: user.providerData[0]
+                    type: SET_USER
                 });
             }catch(error) {
                 console.log(error);
@@ -85,24 +79,40 @@ const StateContextProvider = ({children}) => {
     }
 
 
+    //how to fetch data from firestore
+    const fetchFoodItems = async () => {
 
+        try {
 
-        
-       
-    
+            const itemsSnap = await getDocs(query(collection(db, "foodItems"), orderBy("id","desc")));
 
-    
+            const items = [];
 
-    
+            itemsSnap.forEach((doc) => {
+                items.push({
+                    data: doc.data()
+                })
+            });
+
+            dispatch({
+                type: FETCH_ITEMS,
+                payload: items
+            });
+
+        }catch(error) {
+            console.log(error);
+        }
+    }
 
     //firebase function to check if user is logged in
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setLoading(false);
             dispatch({ 
                 type: "AUTH_IS_READY", 
                 payload: user?.providerData[0] 
             });
-            setLoading(false);
+           
         });
 
        
@@ -115,7 +125,7 @@ const StateContextProvider = ({children}) => {
    
 
   return (
-    <StateContext.Provider value={{user:state.user, login, loading, isMenu, logout}}>
+    <StateContext.Provider value={{user:state.user, login, loading, isMenu, logout, setIsMenu, fetchFoodItems}}>
         {children}
     </StateContext.Provider>
   )
