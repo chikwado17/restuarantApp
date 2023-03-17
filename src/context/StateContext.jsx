@@ -90,7 +90,7 @@ const StateContextProvider = ({children}) => {
 
             itemsSnap.forEach((doc) => {
                 items.push({
-                    data: doc.data()
+                    ...doc.data()
                 })
             });
 
@@ -106,6 +106,8 @@ const StateContextProvider = ({children}) => {
 
     //firebase function to check if user is logged in
     useEffect(() => {
+
+  
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setLoading(false);
             dispatch({ 
@@ -115,17 +117,15 @@ const StateContextProvider = ({children}) => {
            
         });
 
-       
-
+        fetchFoodItems();
         return () => unsubscribe();
-
+        
         // eslint-disable-next-line
     }, []);
 
-   
 
   return (
-    <StateContext.Provider value={{user:state.user, login, loading, isMenu, logout, setIsMenu, fetchFoodItems}}>
+    <StateContext.Provider value={{user:state.user, login, loading, isMenu, logout, setIsMenu, foodItems:state.foodItems, fetchFoodItems}}>
         {children}
     </StateContext.Provider>
   )
