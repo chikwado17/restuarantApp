@@ -2,17 +2,21 @@ import React, { useState } from 'react'
 import { IoFastFood } from 'react-icons/io5';
 import { categories } from '../utils/Categories';
 import { motion } from 'framer-motion';
+import { useStateValue } from '../context/StateContext';
+import RowContainer from './RowContainer';
 
 const MenuContainer = () => {
 
-    const [filter, setFilter] = useState('chicken');
+    const [filter, setFilter] = useState('rice');
+
+    const {foodItems} = useStateValue();
 
   return (
-    <section className='w-full my-6' id='menu'>
-        <div className='w-full flex flex-col items-center justify-center'>
-            <p className='text-2xl font-semibold capitalize text-headingColor relative before:absolute before:rounded-lg before:content before:w-32 before:h-1 before:-bottom-2 before:left-12 before:bg-orange-500 transition-all ease-in-out duration-100'>
-                Our Hot Dishes
-            </p>
+        <section className='w-full my-6' id='menu'>
+            <div className='w-full flex flex-col items-center justify-center'>
+                <p className='text-2xl font-semibold capitalize text-headingColor relative before:absolute before:rounded-lg before:content before:w-32 before:h-1 before:-bottom-2 before:left-12 before:bg-orange-500 transition-all ease-in-out duration-100'>
+                    Our Hot Dishes
+                </p>
 
            
                 <div className='w-full flex items-center justify-start lg:justify-center gap-8 py-6 mt-8 overflow-x-scroll scrollbar-none'>
@@ -26,8 +30,12 @@ const MenuContainer = () => {
                 ))}
                 </div>
            
-        </div>
-    </section>
+
+                <div className='w-full'>
+                    <RowContainer flag={false} data={foodItems?.filter(n => n?.category === filter)} />
+                </div>
+            </div>
+        </section>
   )
 }
 

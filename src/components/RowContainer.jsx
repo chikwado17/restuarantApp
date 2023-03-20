@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { MdShoppingBasket } from 'react-icons/md'
 import { motion } from 'framer-motion'
+import NotFound  from '../img/NotFound.svg';
 
 const RowContainer = ({flag,data, scrollValue}) => {
 
@@ -14,13 +15,18 @@ const RowContainer = ({flag,data, scrollValue}) => {
     },[scrollValue]);
 
   return (
-    <div ref={rowContainer} className={`w-full my-12 scroll-smooth flex items-center gap-3 ${flag ? 'overflow-x-scroll scrollbar-none' : 'overflow-x-hidden flex-wrap'}`}>
+    <div ref={rowContainer} className={`w-full my-12 scroll-smooth flex items-center gap-3 ${flag ? 'overflow-x-scroll scrollbar-none' : 'overflow-x-hidden flex-wrap justify-center'}`}>
         
         
-        {data && data.map(item => (
+        {data && data.length > 0 ? data.map(item => (
             <div key={item.id} className='w-300 h-[225px] min-w-[300px] md:w-340 md:min-w-[340px] hover:drop-shadow-lg bg-cardOverlay rounded-lg p-2  backdrop-blur-lg my-12 flex flex-col items-center justify-between'>
                 <div className="w-full flex items-center justify-between">
-                    <motion.img whileHover={{scale:1.2}} src={item.imageURL} className='w-40 -mt-8 drop-shadow-2xl' alt="" />
+                    <motion.div
+                    whileHover={{scale:1.2}}
+                    className='w-40 -mt-8 h-40 drop-shadow-2xl'
+                    >
+                        <img  src={item.imageURL} className="w-full h-full object-contain" alt="" />
+                    </motion.div>
                 
                     <motion.div
                         whileTap={{scale:0.90}}
@@ -43,7 +49,12 @@ const RowContainer = ({flag,data, scrollValue}) => {
                     </div>
                 </div>
             </div>
-        ))}
+        )) : (
+            <div className='w-full flex flex-col items-center justify-center'>
+                <img src={NotFound} className="h-340" alt="" />
+                <p className='text-xl my-5 text-headingColor font-semibold'>Item Not Available</p>
+            </div>
+        )}
     </div>
   )
 }
