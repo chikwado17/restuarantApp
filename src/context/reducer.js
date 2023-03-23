@@ -1,4 +1,4 @@
-import { SET_USER, AUTH_IS_READY, SIGN_OUT, FETCH_ITEMS } from "./initialTypes";
+import { SET_USER, AUTH_IS_READY, SIGN_OUT, FETCH_ITEMS, SET_CART_SHOW, ADD_TO_CART , FETCH_CART_ITEM} from "./initialTypes";
 
 
 const reducer = (state, action) => {
@@ -14,6 +14,26 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 foodItems: action.payload
+            }
+
+
+        case ADD_TO_CART:
+            return {
+                ...state,
+                cart: [...state.cart, action.payload]
+            }
+
+
+        case FETCH_CART_ITEM:
+            return {
+                ...state,
+                cart: action.payload
+            }
+
+        case SET_CART_SHOW:
+            return {
+                ...state,
+                cartShow: action.payload
             }
 
         case AUTH_IS_READY:

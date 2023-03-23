@@ -2,5 +2,8 @@
 export const initialState = {
     user: null,
     authIsReady: false,
-    foodItems: null
+    foodItems: null,
+    cartShow: false,
+
+    cart:[]
 }

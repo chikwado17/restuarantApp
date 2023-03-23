@@ -1,9 +1,12 @@
 import React, { useEffect, useRef } from 'react'
 import { MdShoppingBasket } from 'react-icons/md'
+import { useStateValue } from '../context/StateContext';
 import { motion } from 'framer-motion'
 import NotFound  from '../img/NotFound.svg';
 
 const RowContainer = ({flag,data, scrollValue}) => {
+
+    const { addToCart } = useStateValue();
 
     
     const rowContainer = useRef();
@@ -32,7 +35,7 @@ const RowContainer = ({flag,data, scrollValue}) => {
                         whileTap={{scale:0.90}}
 
                     className='w-8 h-8 rounded-full bg-red-600 flex items-center justify-center cursor-pointer hover:shadow-md'>
-                        <MdShoppingBasket className='text-white' />
+                        <MdShoppingBasket onClick={() => addToCart(item)} className='text-white' />
                     </motion.div>
                 
                 </div>

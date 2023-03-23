@@ -9,11 +9,11 @@ import CartContainer from './CartContainer';
 
 const MainContainer = () => {
 
-    const {foodItems} = useStateValue();
+    const {foodItems, cartShow, addToCart} = useStateValue();
     const [scrollValue, setScrollValue] = useState(0);
 
 
-    useEffect(() => {}, [scrollValue])
+    useEffect(() => {}, [scrollValue, cartShow])
 
 
 
@@ -40,13 +40,17 @@ const MainContainer = () => {
                 </div>
             </div>
 
-            <RowContainer scrollValue={scrollValue} flag={true} data={foodItems?.filter(n => n?.category === 'fruits')} />
+            <RowContainer addToCart={addToCart} scrollValue={scrollValue} flag={true} data={foodItems?.filter(n => n?.category === 'fruits')} />
         </section>
 
 
         <MenuContainer />
 
+
+
+      {cartShow &&
         <CartContainer />
+        }
     </div>
   )
 }

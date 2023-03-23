@@ -6,7 +6,7 @@ import { doc, setDoc, getDoc, getDocs, collection, query, orderBy } from "fireba
 import { app } from "../firebase";
 
 
-import { FETCH_ITEMS, SET_USER, SIGN_OUT } from './initialTypes';
+import { FETCH_ITEMS, SET_CART_SHOW, SET_USER, SIGN_OUT, ADD_TO_CART, FETCH_CART_ITEM } from './initialTypes';
 import { initialState } from './initialState';
 import  reducer  from './reducer';
 
@@ -118,14 +118,78 @@ const StateContextProvider = ({children}) => {
         });
 
         fetchFoodItems();
+        fetchCartItems();
         return () => unsubscribe();
         
         // eslint-disable-next-line
     }, []);
 
 
+    //context to show cart when clicked
+    const showCart = () => {
+        dispatch({
+            type:SET_CART_SHOW,
+            payload: !state.cartShow
+        });
+    }
+
+
+
+    //function to add to cart state
+    const addToCart = async (foodItem) => {
+        try {
+
+            const docRef = doc(db, 'foodItem', foodItem.id);
+            const docItem = await getDoc(docRef);
+
+            const itemId = docItem.id;
+
+        
+            await setDoc(doc(db, 'cart', `${itemId}`),{...foodItem}, { merge: true });
+           
+
+            dispatch({
+                type: ADD_TO_CART
+            });
+
+            fetchCartItems();
+
+        }catch(error) {
+            console.log(error);
+        }
+    }
+
+
+    const fetchCartItems = async () => {
+
+        try {
+
+            const itemsSnap = await getDocs(query(collection(db, "cart"), orderBy("id","desc")));
+
+            const items = [];
+
+            itemsSnap.forEach((doc) => {
+                items.push({
+                    ...doc.data()
+                })
+            });
+
+            dispatch({
+                type: FETCH_CART_ITEM,
+                payload: items
+            });
+
+        }catch(error) {
+            console.log(error);
+        }
+    }
+
+
+
+       
+
   return (
-    <StateContext.Provider value={{user:state.user, login, loading, isMenu, logout, setIsMenu, foodItems:state.foodItems, fetchFoodItems}}>
+    <StateContext.Provider value={{user:state.user, cart:state.cart, login, loading, isMenu, logout, setIsMenu, foodItems:state.foodItems, addToCart, fetchFoodItems, showCart, cartShow:state.cartShow}}>
         {children}
     </StateContext.Provider>
   )
