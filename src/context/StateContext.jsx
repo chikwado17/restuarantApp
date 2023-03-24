@@ -18,7 +18,8 @@ const StateContext = createContext();
 const StateContextProvider = ({children}) => {
     const [loading, setLoading] = useState(true);
     const [isMenu, setIsMenu] = useState(false);
-
+    const [uid, setUid] = useState(null);
+    // const [cartProducts, setCartProducts] = useState([]);
     const auth = getAuth(app);
 
 
@@ -110,15 +111,19 @@ const StateContextProvider = ({children}) => {
   
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setLoading(false);
+           if(user) {
             dispatch({ 
                 type: "AUTH_IS_READY", 
                 payload: user?.providerData[0] 
             });
+
+            setUid(user?.uid);
+           }
            
         });
 
         fetchFoodItems();
-        fetchCartItems();
+        // fetchCartItems();
         return () => unsubscribe();
         
         // eslint-disable-next-line
@@ -137,56 +142,62 @@ const StateContextProvider = ({children}) => {
 
     //function to add to cart state
     const addToCart = async (foodItem) => {
-        try {
-
-            const docRef = doc(db, 'foodItem', foodItem.id);
-            const docItem = await getDoc(docRef);
-
-            const itemId = docItem.id;
-
-        
-            await setDoc(doc(db, 'cart', `${itemId}`),{...foodItem}, { merge: true });
+        if(uid !== null) {
            
+            try {
 
-            dispatch({
-                type: ADD_TO_CART
-            });
+               
+                await setDoc(doc(db, 'cart ' + uid, `${Date.now()}`),{...foodItem}, { merge: true });
 
-            fetchCartItems();
+                dispatch({
+                    type: ADD_TO_CART
+                });
 
-        }catch(error) {
-            console.log(error);
+            }catch {
+
+            }
+           
+        }else {
+            console.log('log in');
         }
+
     }
 
+    useEffect(() => {
 
-    const fetchCartItems = async () => {
 
-        try {
+        const fetchCartItems = async () => {
 
-            const itemsSnap = await getDocs(query(collection(db, "cart"), orderBy("id","desc")));
+            try {
 
-            const items = [];
+                const itemsSnap = await getDocs(collection(db, "cart " + uid));
 
-            itemsSnap.forEach((doc) => {
-                items.push({
-                    ...doc.data()
-                })
-            });
+                const items = [];
 
-            dispatch({
-                type: FETCH_CART_ITEM,
-                payload: items
-            });
+                itemsSnap.forEach((doc) => {
+                    items.push({
+                        // id: doc.id,
+                        ...doc.data()
+                    })
+                });
 
-        }catch(error) {
-            console.log(error);
+
+                
+                dispatch({
+                    type: FETCH_CART_ITEM,
+                    payload: items
+                });
+
+            }catch(error) {
+                console.log(error);
+            }
         }
-    }
+
+        fetchCartItems();
+
+    }, [uid])
 
 
-
-       
 
   return (
     <StateContext.Provider value={{user:state.user, cart:state.cart, login, loading, isMenu, logout, setIsMenu, foodItems:state.foodItems, addToCart, fetchFoodItems, showCart, cartShow:state.cartShow}}>

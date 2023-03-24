@@ -1,4 +1,4 @@
-import { SET_USER, AUTH_IS_READY, SIGN_OUT, FETCH_ITEMS, SET_CART_SHOW, ADD_TO_CART , FETCH_CART_ITEM} from "./initialTypes";
+import { SET_USER, AUTH_IS_READY, SIGN_OUT, FETCH_ITEMS, SET_CART_SHOW, ADD_TO_CART , FETCH_CART_ITEM, CLEAR_USERS_CART} from "./initialTypes";
 
 
 const reducer = (state, action) => {
@@ -42,7 +42,8 @@ const reducer = (state, action) => {
         case SIGN_OUT: 
             return {
                 ...state,
-                user: null
+                user: null,
+                cart: []
             }
 
 

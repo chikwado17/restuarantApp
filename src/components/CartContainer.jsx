@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { MdOutlineKeyboardBackspace } from 'react-icons/md'
 import { RiRefreshFill} from 'react-icons/ri'
 import { BiMinus, BiPlus } from 'react-icons/bi'
@@ -13,7 +13,7 @@ const CartContainer = () => {
 
     const { showCart, cart} = useStateValue();
 
-
+   console.log(cart && cart?.id);   
 
   return (
     <motion.div 
