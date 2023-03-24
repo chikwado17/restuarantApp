@@ -2,7 +2,7 @@ import React, { createContext, useContext, useReducer, useEffect, useState } fro
 
 import { getAuth, signInWithPopup, GoogleAuthProvider,onAuthStateChanged, signOut } from 'firebase/auth';
 import { db } from '../firebase';
-import { doc, setDoc, getDoc, getDocs, collection, query, orderBy } from "firebase/firestore"; 
+import { doc, setDoc, getDoc, getDocs, collection, query, orderBy, updateDoc, where } from "firebase/firestore"; 
 import { app } from "../firebase";
 
 
@@ -19,7 +19,7 @@ const StateContextProvider = ({children}) => {
     const [loading, setLoading] = useState(true);
     const [isMenu, setIsMenu] = useState(false);
     const [uid, setUid] = useState(null);
-    // const [cartProducts, setCartProducts] = useState([]);
+    const [cartProducts, setCartProducts] = useState([]);
     const auth = getAuth(app);
 
 
@@ -140,67 +140,86 @@ const StateContextProvider = ({children}) => {
 
 
 
-    //function to add to cart state
-    const addToCart = async (foodItem) => {
-        if(uid !== null) {
-           
+ 
+
+        const addToCart = async (foodItem) => {
+        if (uid !== null) {
             try {
+            // Check if the item already exists in the user's cart
+            const cartRef = collection(db, `cart ${uid}`);
+            const cartQuery = query(
+                cartRef,
+                where("title", "==", foodItem.title)
+            );
+            const cartSnap = await getDocs(cartQuery);
 
-               
-                await setDoc(doc(db, 'cart ' + uid, `${Date.now()}`),{...foodItem}, { merge: true });
-
-                dispatch({
-                    type: ADD_TO_CART
-                });
-
-            }catch {
-
+        
+        
+            if (!cartSnap.empty) {
+                // If the item already exists, update its quantity
+                    const cartItemDoc = cartSnap.docs[0];
+                        await updateDoc(cartItemDoc.ref, {
+                        qty: cartItemDoc.data().qty + foodItem.qty,
+                    });
+                    return;
             }
-           
-        }else {
-            console.log('log in');
-        }
-
-    }
-
-    useEffect(() => {
-
-
-        const fetchCartItems = async () => {
-
-            try {
-
-                const itemsSnap = await getDocs(collection(db, "cart " + uid));
-
-                const items = [];
-
-                itemsSnap.forEach((doc) => {
-                    items.push({
-                        // id: doc.id,
-                        ...doc.data()
-                    })
-                });
-
-
-                
-                dispatch({
-                    type: FETCH_CART_ITEM,
-                    payload: items
-                });
-
-            }catch(error) {
-                console.log(error);
+        
+            // If the item does not exist, add it to the cart
+            await setDoc(doc(db, `cart ${uid}`, `${Date.now()}`), {
+                ...foodItem,
+            });
+        
+            dispatch({
+                type: ADD_TO_CART,
+                payload: foodItem,
+            });
+            } catch (error) {
+            console.error("Error adding item to cart:", error);
             }
+        } else {
+            console.log("User is not logged in");
         }
+        };
+        
+        
 
-        fetchCartItems();
 
-    }, [uid])
+       useEffect(() => {
+            const fetchCartItems = async () => {
+
+                try {
+
+                    const itemsSnap = await getDocs(collection(db, "cart " + uid));
+
+                    const items = [];
+
+                    itemsSnap.forEach((doc) => {
+                        items.push({
+                            ...doc.data()
+                        })
+                    });
+
+                    setCartProducts(items);
+                    
+                    dispatch({
+                        type: FETCH_CART_ITEM,
+                        payload: items
+                    });
+
+                }catch(error) {
+                    console.log(error);
+                }
+            }
+
+            fetchCartItems();
+       }, [uid])
+
+   
 
 
 
   return (
-    <StateContext.Provider value={{user:state.user, cart:state.cart, login, loading, isMenu, logout, setIsMenu, foodItems:state.foodItems, addToCart, fetchFoodItems, showCart, cartShow:state.cartShow}}>
+    <StateContext.Provider value={{user:state.user, cart:state.cart, cartProducts, login, loading, isMenu, logout, setIsMenu, foodItems:state.foodItems, addToCart, fetchFoodItems, showCart, cartShow:state.cartShow}}>
         {children}
     </StateContext.Provider>
   )

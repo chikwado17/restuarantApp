@@ -1,4 +1,4 @@
-import { SET_USER, AUTH_IS_READY, SIGN_OUT, FETCH_ITEMS, SET_CART_SHOW, ADD_TO_CART , FETCH_CART_ITEM, CLEAR_USERS_CART} from "./initialTypes";
+import { SET_USER, AUTH_IS_READY, SIGN_OUT, FETCH_ITEMS, SET_CART_SHOW, ADD_TO_CART , FETCH_CART_ITEM} from "./initialTypes";
 
 
 const reducer = (state, action) => {
