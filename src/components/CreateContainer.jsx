@@ -5,7 +5,7 @@ import { db, storage } from '../firebase';
 import { MdFastfood, MdCloudUpload, MdDelete, MdFoodBank, MdAttachMoney } from 'react-icons/md'
 import Loader from './Loader';
 import { doc, setDoc } from 'firebase/firestore';
-import { useStateValue } from '../context/StateContext';
+// import { useStateValue } from '../context/StateContext';
 import { categories } from '../utils/Categories';
 
 
@@ -23,7 +23,7 @@ const CreateContainer = () => {
   const [isLoading, setIsLoading] = useState(false);
 
  
-  const {fetchFoodItems} = useStateValue();
+  // const {fetchFoodItems} = useStateValue();
 
   
 
@@ -141,7 +141,7 @@ const CreateContainer = () => {
               setIsLoading(false);
             }, 4000);
 
-            fetchFoodItems();
+            // fetchFoodItems();
         }
 
 

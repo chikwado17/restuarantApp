@@ -11,7 +11,7 @@ import { useStateValue } from '../context/StateContext';
 
 const CartContainer = () => {
 
-    const { showCart, cart} = useStateValue();
+    const { showCart, user, userCart} = useStateValue();
 
 
 
@@ -37,7 +37,7 @@ const CartContainer = () => {
 
 {/* bottom section */}
        
-       {cart && cart.length > 0 ? (
+       {userCart && userCart.length > 0 ? (
                     <div className='w-full h-full bg-cartBg rounded-t-[2rem] flex flex-col'>
                     {/* for the cart items */}
                     
@@ -46,7 +46,7 @@ const CartContainer = () => {
                         
                         
                         {/* for the cart item */}
-                        {cart && cart.length > 0 && cart.map(cartItem => (
+                        {userCart && userCart.length > 0 && userCart.map(cartItem => (
                         
                             <div key={cartItem?.id} className='w-full p-1 px-2 rounded-lg bg-cartItem flex items-center gap-2'>
                                 <img src={cartItem?.imageURL} alt={'item-img'} className="w-20 h-20 max-w-[60px] rounded-full object-contain" />
@@ -95,14 +95,28 @@ const CartContainer = () => {
                         <p className='text-gray-200 text-xl font-semibold'>&#x20A6;11.5</p>
                     </div>
 
+                    {user && user ? (
 
-                    <motion.button
-                    whileTap={{scale:0.8}}
-                    type="button"
-                    className='w-full p-2 rounded-full bg-orange-400 text-gray-50 text-lg my-2 hover:shadow-lg'
-                    >
-                        Check Out
-                    </motion.button>
+                            <motion.button
+                            whileTap={{scale:0.8}}
+                            type="button"
+                            className='w-full p-2 rounded-full bg-orange-400 text-gray-50 text-lg my-2 hover:shadow-lg'
+                            >
+                                Check Out
+                            </motion.button>
+                    ) : (
+
+                        <motion.button
+                        whileTap={{scale:0.8}}
+                        type="button"
+                        className='w-full p-2 rounded-full bg-orange-400 text-gray-50 text-lg my-2 hover:shadow-lg'
+                        >
+                            Log in to checkout cart
+                        </motion.button>
+                    )
+                   
+
+                    }
                 </div>
             </div>
        ): (

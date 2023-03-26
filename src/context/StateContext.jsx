@@ -2,11 +2,11 @@ import React, { createContext, useContext, useReducer, useEffect, useState } fro
 
 import { getAuth, signInWithPopup, GoogleAuthProvider,onAuthStateChanged, signOut } from 'firebase/auth';
 import { db } from '../firebase';
-import { doc, setDoc, getDoc, getDocs, collection, query, orderBy, updateDoc, where } from "firebase/firestore"; 
+import { doc, setDoc, getDoc, getDocs, collection, query, updateDoc, where, onSnapshot} from "firebase/firestore"; 
 import { app } from "../firebase";
 
 
-import { FETCH_ITEMS, SET_CART_SHOW, SET_USER, SIGN_OUT, ADD_TO_CART, FETCH_CART_ITEM } from './initialTypes';
+import { FETCH_ITEMS, SET_CART_SHOW, SET_USER, SIGN_OUT, ADD_TO_CART } from './initialTypes';
 import { initialState } from './initialState';
 import  reducer  from './reducer';
 
@@ -19,7 +19,7 @@ const StateContextProvider = ({children}) => {
     const [loading, setLoading] = useState(true);
     const [isMenu, setIsMenu] = useState(false);
     const [uid, setUid] = useState(null);
-    const [cartProducts, setCartProducts] = useState([]);
+    const [userCart, setUserCart] = useState([]);
     const auth = getAuth(app);
 
 
@@ -41,8 +41,6 @@ const StateContextProvider = ({children}) => {
                 // // //getting user doc reference
                 const docRef = doc(db, 'users', user.uid);
                 const docSnap = await getDoc(docRef);
-    
-    
                 //     //check if user doesn't exit create user and save to database
                 if(!docSnap.exists()){
                     //create user in database
@@ -80,30 +78,38 @@ const StateContextProvider = ({children}) => {
     }
 
 
-    //how to fetch data from firestore
-    const fetchFoodItems = async () => {
-
-        try {
-
-            const itemsSnap = await getDocs(query(collection(db, "foodItems"), orderBy("id","desc")));
-
-            const items = [];
-
-            itemsSnap.forEach((doc) => {
-                items.push({
-                    ...doc.data()
-                })
-            });
-
-            dispatch({
-                type: FETCH_ITEMS,
-                payload: items
-            });
-
-        }catch(error) {
-            console.log(error);
-        }
+    //context to show cart when clicked
+    const showCart = () => {
+        dispatch({
+            type:SET_CART_SHOW,
+            payload: !state.cartShow
+        });
     }
+
+
+    useEffect(() => {
+           
+              const cartRef = collection(db, "foodItems");
+              const cartQuery = query(cartRef);
+        
+              const unsubscribe = onSnapshot(cartQuery, (querySnapshot) => {
+                const items = [];
+                querySnapshot.forEach((doc) => {
+                    items.push({ ...doc.data() });
+                });
+
+                dispatch({
+                    type: FETCH_ITEMS,
+                    payload: items
+                });
+               
+              });
+        
+              return () => {
+                unsubscribe();
+              };
+         
+          }, []);
 
     //firebase function to check if user is logged in
     useEffect(() => {
@@ -122,7 +128,7 @@ const StateContextProvider = ({children}) => {
            
         });
 
-        fetchFoodItems();
+        // fetchFoodItems();
         // fetchCartItems();
         return () => unsubscribe();
         
@@ -130,18 +136,10 @@ const StateContextProvider = ({children}) => {
     }, []);
 
 
-    //context to show cart when clicked
-    const showCart = () => {
-        dispatch({
-            type:SET_CART_SHOW,
-            payload: !state.cartShow
-        });
-    }
 
+    
 
-
- 
-
+//function to add to cart to firestore
         const addToCart = async (foodItem) => {
         if (uid !== null) {
             try {
@@ -152,23 +150,29 @@ const StateContextProvider = ({children}) => {
                 where("title", "==", foodItem.title)
             );
             const cartSnap = await getDocs(cartQuery);
-
-        
-        
             if (!cartSnap.empty) {
                 // If the item already exists, update its quantity
+
                     const cartItemDoc = cartSnap.docs[0];
-                        await updateDoc(cartItemDoc.ref, {
+                 
+
+                    const itemQuantity = cartItemDoc.data().qty;
+
+                         updateDoc(cartItemDoc.ref, {
                         qty: cartItemDoc.data().qty + foodItem.qty,
+                        price: foodItem.price * (itemQuantity + 1),
+                    
                     });
-                    return;
+                    
+                    return;   
+                   
             }
-        
+          
             // If the item does not exist, add it to the cart
             await setDoc(doc(db, `cart ${uid}`, `${Date.now()}`), {
-                ...foodItem,
+                ...foodItem
             });
-        
+            
             dispatch({
                 type: ADD_TO_CART,
                 payload: foodItem,
@@ -179,32 +183,53 @@ const StateContextProvider = ({children}) => {
         } else {
             console.log("User is not logged in");
         }
-        };
+    };
         
+
+
+        // useEffect(() => {
+        //     if (uid !== null) {
+        //       const cartRef = collection(db, `cart ${uid}`);
+        //       const cartQuery = query(cartRef);
         
+        //       const unsubscribe = onSnapshot(cartQuery, (querySnapshot) => {
+        //         const newCartItems = [];
+        //         querySnapshot.forEach((doc) => {
+        //           newCartItems.push({ id: doc.id, ...doc.data() });
+        //         });
+               
+        //       });
+        
+        //       return () => {
+        //         unsubscribe();
+        //       };
+        //     }
+        //   }, [uid]);
+
+
 
 
        useEffect(() => {
-            const fetchCartItems = async () => {
+    
+        if(uid !== null) {
+            const fetchCartItems =  () => {
 
                 try {
 
-                    const itemsSnap = await getDocs(collection(db, "cart " + uid));
+                    const itemsSnap = collection(db, "cart " + uid);
 
-                    const items = [];
+                    const unsubscribe = onSnapshot(itemsSnap, (querySnapshot) => {
+                        const newCartItems = [];
+                            querySnapshot.forEach((doc) => {
+                            newCartItems.push({ ...doc.data() });
+                        });
 
-                    itemsSnap.forEach((doc) => {
-                        items.push({
-                            ...doc.data()
-                        })
+                        setUserCart(newCartItems);
                     });
 
-                    setCartProducts(items);
-                    
-                    dispatch({
-                        type: FETCH_CART_ITEM,
-                        payload: items
-                    });
+                    return () => {
+                        unsubscribe();
+                    };
 
                 }catch(error) {
                     console.log(error);
@@ -212,14 +237,14 @@ const StateContextProvider = ({children}) => {
             }
 
             fetchCartItems();
+        }
+         
        }, [uid])
 
    
 
-
-
   return (
-    <StateContext.Provider value={{user:state.user, cart:state.cart, cartProducts, login, loading, isMenu, logout, setIsMenu, foodItems:state.foodItems, addToCart, fetchFoodItems, showCart, cartShow:state.cartShow}}>
+    <StateContext.Provider value={{user:state.user, cart:state.cart, login, loading, isMenu, logout, setIsMenu, userCart, foodItems:state.foodItems, addToCart, showCart, cartShow:state.cartShow}}>
         {children}
     </StateContext.Provider>
   )

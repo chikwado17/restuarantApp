@@ -9,9 +9,7 @@ import { useStateValue } from '../context/StateContext';
 
 const Header = () => {
 
-  const { login, user, loading, isMenu, logout, setIsMenu, showCart, cart} = useStateValue();
-
-
+  const { login, user, loading, isMenu, logout, setIsMenu, showCart, userCart} = useStateValue();
 
 
   return (
@@ -37,9 +35,9 @@ const Header = () => {
                     <MdShoppingBasket className='text-textColor text-2xl cursor-pointer' />
                     
                     
-                    {cart && cart?.length > 0 &&
+                    {userCart && userCart?.length > 0 &&
                     <div className='w-5 h-5 absolute -top-2 -right-2 rounded-full bg-cartNumBg flex items-center justify-center'>
-                        <p className="text-sm text-white font-semibold">{cart?.length}</p>
+                        <p className="text-sm text-white font-semibold">{userCart?.length}</p>
                     </div>}
                 </motion.div>
 
@@ -81,9 +79,9 @@ const Header = () => {
             <motion.div whileTap={{scale:0.6}} onClick={showCart} className="relative flex items-center justify-center">
                 <MdShoppingBasket className='text-textColor text-2xl cursor-pointer' />
                
-               {cart && cart.length > 0 &&
+               {userCart && userCart.length > 0 &&
                 <div className='w-5 h-5 absolute -top-2 -right-2 rounded-full bg-cartNumBg flex items-center justify-center'>
-                    <p className="text-sm text-white font-semibold">{cart?.length}</p>
+                    <p className="text-sm text-white font-semibold">{userCart?.length}</p>
                 </div>}
             </motion.div>
 
