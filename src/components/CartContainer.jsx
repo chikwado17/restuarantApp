@@ -1,15 +1,19 @@
 import React from 'react'
 import { MdOutlineKeyboardBackspace } from 'react-icons/md'
-import { RiRefreshFill} from 'react-icons/ri'
-import { BiMinus, BiPlus } from 'react-icons/bi'
+import {  BiMinus, BiPlus } from 'react-icons/bi'
+import { MdDeleteOutline } from 'react-icons/md';
 import { motion } from 'framer-motion'
 import img1 from '../img/emptyCart.svg';
 import { useStateValue } from '../context/StateContext';
-
-
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { app } from "../firebase";
+import { collection, doc, deleteDoc } from "firebase/firestore";
+import  { db } from '../firebase';
 
 
 const CartContainer = () => {
+
+    const auth = getAuth(app);
 
     const { showCart, user, userCart, incrementQuantity, decrementQuantity} = useStateValue();
 
@@ -23,6 +27,19 @@ const CartContainer = () => {
         decrementQuantity(product)
     }
 
+
+    //function to delete single item from cart
+    const handleDelete = (cartItemId) => {
+        onAuthStateChanged(auth, (user) => {
+
+            if(user) {
+                const cartItemRef = doc(collection(db, `cart ${user.uid}`), cartItemId);
+                 deleteDoc(cartItemRef);
+            }
+
+        })
+    }
+
  
   return (
     <motion.div 
@@ -31,15 +48,12 @@ const CartContainer = () => {
     exit={{opacity: 0, x:200}}
     
     className='fixed z-[101] top-0 right-0 w-full md:w-375 h-screen bg-white drop-shadow-md flex flex-col'>
-        <div className='w-full flex items-center justify-between p-4 cursor-pointer'>
+        <div className='w-full  p-4 cursor-pointer'>
             <motion.div whileTap={{scale:0.75}}>
                 <MdOutlineKeyboardBackspace onClick={showCart} className='text-textColor text-3xl' />
             </motion.div>
-            <p className='text-textColor text-lg font-semibold'>Cart</p>
-            
-            <motion.p whileTap={{scale:0.75}} className='flex items-center gap-2 p-1 px-2 my-2 bg-gray-100 rounded-md hover:shadow-md cursor-pointer text-textColor'>Clear 
-            
-                <RiRefreshFill /> {" "} </motion.p>
+            <p className='text-textColor text-lg flex items-center justify-center font-semibold'>Cart</p>
+         
         </div>
 
 
@@ -58,6 +72,11 @@ const CartContainer = () => {
                         {userCart && userCart.length > 0 && userCart.map(cartItem => (
                         
                             <div key={cartItem?.id} className='w-full p-1 px-2 rounded-lg bg-cartItem flex items-center gap-2'>
+
+                                    <motion.div whileTap={{scale:0.75}}>
+                                        <MdDeleteOutline className="text-red-700 font-extrabold text-2xl" onClick={() => handleDelete(cartItem.id)} />
+                                    </motion.div>
+
                                 <img src={cartItem?.imageURL} alt={'item-img'} className="w-20 h-20 max-w-[60px] rounded-full object-contain" />
 
                                 {/* name section */}
