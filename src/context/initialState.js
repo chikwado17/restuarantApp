@@ -4,6 +4,7 @@ export const initialState = {
     authIsReady: false,
     foodItems: null,
     cartShow: false,
+    isLoading: true,
 
     cart:[]
 }

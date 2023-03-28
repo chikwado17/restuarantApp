@@ -11,10 +11,19 @@ import { useStateValue } from '../context/StateContext';
 
 const CartContainer = () => {
 
-    const { showCart, user, userCart} = useStateValue();
+    const { showCart, user, userCart, incrementQuantity, decrementQuantity} = useStateValue();
 
+   
 
+    const handleIncrementCart = (product) => {
+        incrementQuantity(product)
+    }
 
+    const handleDecrementCart = (product) => {
+        decrementQuantity(product)
+    }
+
+ 
   return (
     <motion.div 
     initial={{opacity: 0, x:200}}
@@ -60,13 +69,14 @@ const CartContainer = () => {
                                 {/* button section */}
                                 <div className='group flex items-center gap-2 ml-auto cursor-pointer'>
                                     <motion.div whileTap={{scale:0.75}}>
-                                        <BiMinus className="text-gray-50" />
+                                        <BiMinus className="text-gray-50" onClick={() => handleDecrementCart(cartItem)} />
                                     </motion.div>
 
                                     <p className='w-5 h-5 rounded-sm bg-cartBg text-gray-50 flex items-center justify-center'>{cartItem?.qty}</p>
 
+                                    
                                     <motion.div whileTap={{scale:0.75}}>
-                                        <BiPlus className="text-gray-50" />
+                                        <BiPlus className="text-gray-50" onClick={() => handleIncrementCart(cartItem)} />
                                     </motion.div>
                                 </div>
                             </div>

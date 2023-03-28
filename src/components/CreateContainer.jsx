@@ -120,8 +120,8 @@ const CreateContainer = () => {
                 imageURL: imageAsset,
                 category: category,
                 calories: calories,
-                qty:1,
-                price:price
+                // qty:1,
+                price:parseInt(price)
             }
 
             //save to database
