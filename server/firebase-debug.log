@@ -1,0 +1,96 @@
+[debug] [2023-04-04T14:50:33.971Z] ----------------------------------------------------------------------
+[debug] [2023-04-04T14:50:33.973Z] Command:       /home/devemma/.nvm/versions/node/v18.12.0/bin/node /home/devemma/.nvm/versions/node/v18.12.0/bin/firebase init
+[debug] [2023-04-04T14:50:33.974Z] CLI Version:   11.25.2
+[debug] [2023-04-04T14:50:33.974Z] Platform:      linux
+[debug] [2023-04-04T14:50:33.974Z] Node Version:  v18.12.0
+[debug] [2023-04-04T14:50:33.975Z] Time:          Tue Apr 04 2023 15:50:33 GMT+0100 (West Africa Standard Time)
+[debug] [2023-04-04T14:50:33.975Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-04T14:50:33.981Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-04T14:50:33.981Z] > authorizing via signed-in user (chikwadonworie@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /home/devemma/recreate/food-delivery/server
+
+[info] 
+=== Account Setup
+[info] 
+[info] Which account do you want to use for this project? Choose an account or add a new one now
+[info] 
+[debug] [2023-04-04T14:50:42.033Z] setProjectAccount(/home/devemma/recreate/food-delivery/server, chizaramamadi90@gmail.com)
+[info] 
+[info] ✔  Using account: chizaramamadi90@gmail.com 
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2023-04-04T14:50:44.798Z] > refreshing access token with scopes: []
+[debug] [2023-04-04T14:50:44.805Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-04-04T14:50:44.806Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-04-04T14:50:45.380Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2023-04-04T14:50:45.380Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-04-04T14:50:45.397Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2023-04-04T14:50:46.366Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2023-04-04T14:50:46.367Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] i  Using project restuarantapp-10311 (restuarantapp) 
+[info] 
+=== Functions Setup
+[debug] [2023-04-04T14:50:50.540Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-04T14:50:50.542Z] > authorizing via signed-in user (chizaramamadi90@gmail.com)
+[debug] [2023-04-04T14:50:50.543Z] [iam] checking project restuarantapp-10311 for permissions ["firebase.projects.get"]
+[debug] [2023-04-04T14:50:50.547Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/restuarantapp-10311:testIamPermissions [none]
+[debug] [2023-04-04T14:50:50.548Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/restuarantapp-10311:testIamPermissions x-goog-quota-user=projects/restuarantapp-10311
+[debug] [2023-04-04T14:50:50.549Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/restuarantapp-10311:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2023-04-04T14:50:51.702Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/restuarantapp-10311:testIamPermissions 200
+[debug] [2023-04-04T14:50:51.703Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/restuarantapp-10311:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2023-04-04T14:50:51.707Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/restuarantapp-10311/services/cloudfunctions.googleapis.com [none]
+[debug] [2023-04-04T14:50:51.707Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/restuarantapp-10311/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/restuarantapp-10311
+[debug] [2023-04-04T14:50:51.720Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/restuarantapp-10311/services/runtimeconfig.googleapis.com [none]
+[debug] [2023-04-04T14:50:51.721Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/restuarantapp-10311/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/restuarantapp-10311
+[debug] [2023-04-04T14:50:53.037Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/restuarantapp-10311/services/runtimeconfig.googleapis.com 200
+[debug] [2023-04-04T14:50:53.038Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/restuarantapp-10311/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2023-04-04T14:50:53.046Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/restuarantapp-10311/services/cloudfunctions.googleapis.com 200
+[debug] [2023-04-04T14:50:53.047Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/restuarantapp-10311/services/cloudfunctions.googleapis.com [omitted]
+[debug] [2023-04-04T14:50:53.050Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/restuarantapp-10311/services/cloudfunctions.googleapis.com:enable [none]
+[debug] [2023-04-04T14:50:53.050Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/restuarantapp-10311/services/cloudfunctions.googleapis.com:enable x-goog-quota-user=projects/restuarantapp-10311
+[debug] [2023-04-04T14:50:54.979Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/restuarantapp-10311/services/cloudfunctions.googleapis.com:enable 200
+[debug] [2023-04-04T14:50:54.979Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/restuarantapp-10311/services/cloudfunctions.googleapis.com:enable [omitted]
+[debug] [2023-04-04T14:51:04.986Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/restuarantapp-10311/services/cloudfunctions.googleapis.com [none]
+[debug] [2023-04-04T14:51:04.986Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/restuarantapp-10311/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/restuarantapp-10311
+[debug] [2023-04-04T14:51:06.105Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/restuarantapp-10311/services/cloudfunctions.googleapis.com 200
+[debug] [2023-04-04T14:51:06.105Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/restuarantapp-10311/services/cloudfunctions.googleapis.com [omitted]
+[info] Let's create a new codebase for your functions.
+[info] A directory corresponding to the codebase will be created in your project
+[info] with sample code pre-configured.
+
+[info] See https://firebase.google.com/docs/functions/organize-functions for
+[info] more information on organizing your functions using codebases.
+
+[info] Functions can be deployed with firebase deploy.
+
+[info] ✔  Wrote functions/package.json 
+[info] ✔  Wrote functions/.eslintrc.js 
+[info] ✔  Wrote functions/index.js 
+[info] ✔  Wrote functions/.gitignore 
+[info] 
+[info] i  Writing configuration info to firebase.json... 
+[info] i  Writing project information to .firebaserc... 
+[info] i  Writing gitignore file to .gitignore... 
+[info] 
+[info] ✔  Firebase initialization complete! 
+[debug] [2023-04-04T14:53:14.344Z] Error: Timed out.
+    at Timeout._onTimeout (/home/devemma/.nvm/versions/node/v18.12.0/lib/node_modules/firebase-tools/lib/utils.js:253:49)
+    at listOnTimeout (node:internal/timers:564:17)
+    at process.processTimers (node:internal/timers:507:7)
+[error] 
+[error] Error: An unexpected error has occurred.

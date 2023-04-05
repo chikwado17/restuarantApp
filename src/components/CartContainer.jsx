@@ -9,15 +9,16 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { app } from "../firebase";
 import { collection, doc, deleteDoc } from "firebase/firestore";
 import  { db } from '../firebase';
+import axios from 'axios';
 
 
 const CartContainer = () => {
 
     const auth = getAuth(app);
 
-    const { showCart, user, userCart, incrementQuantity, decrementQuantity} = useStateValue();
+    const { showCart, user, userCart, uid, incrementQuantity, decrementQuantity} = useStateValue();
 
-   
+  
 
     const handleIncrementCart = (product) => {
         incrementQuantity(product)
@@ -40,6 +41,52 @@ const CartContainer = () => {
         })
     }
 
+    //getting the price from cartProducts in a separate array
+    const totalAmount = userCart.map(cartProduct => {
+        return cartProduct.price;
+    })
+
+    //reducing the price in a single value
+    const reducerOfPrice = (accumulator, currentValue) => {
+        return accumulator + currentValue;
+    }
+    const totalPrice = totalAmount.reduce(reducerOfPrice,0);
+
+
+   
+
+    //charging payment
+    const handleCheckout = async () => {
+
+       
+
+     
+
+        const data = {
+            user:uid,
+            userCart:userCart,
+            totalPrice:totalPrice + 50
+        }
+
+        axios.post(`http://localhost:4000/create-checkout-session`, { data }).then((res) => {
+            
+
+        if(res.data.url) {
+            window.location.href = res.data.url;
+
+        
+        }
+
+        }).catch((err) => {
+            console.log(err);
+        })
+
+        
+    }
+
+
+
+
  
   return (
     <motion.div 
@@ -49,11 +96,9 @@ const CartContainer = () => {
     
     className='fixed z-[101] top-0 right-0 w-full md:w-375 h-screen bg-white drop-shadow-md flex flex-col'>
         <div className='w-full  p-4 cursor-pointer'>
-            <motion.div whileTap={{scale:0.75}}>
-                <MdOutlineKeyboardBackspace onClick={showCart} className='text-textColor text-3xl' />
-            </motion.div>
+            <MdOutlineKeyboardBackspace onClick={showCart} className='text-textColor text-3xl' />
+        
             <p className='text-textColor text-lg flex items-center justify-center font-semibold'>Cart</p>
-         
         </div>
 
 
@@ -108,12 +153,12 @@ const CartContainer = () => {
                     <div className='w-full flex-1 bg-cartTotal rounded-t-[2rem] flex flex-col items-center justify-evenly px-8 py-2'>
                         <div className='w-full flex items-center justify-between'>
                             <p className='text-gray-400 text-lg'>Sub Total</p>
-                            <p className='text-gray-400 text-lg'>&#x20A6;8.5</p>
+                            <p className='text-gray-400 text-lg'>&#x20A6; {totalPrice}</p>
                         </div>
 
                         <div className='w-full flex items-center justify-between'>
                             <p className='text-gray-400 text-lg'>Delivery</p>
-                            <p className='text-gray-400 text-lg'>&#x20A6;2.5</p>
+                            <p className='text-gray-400 text-lg'>&#x20A6; 50</p>
                         </div>
                     
                         <div className='w-full border-b border-gray-600 my-2'></div>
@@ -121,17 +166,22 @@ const CartContainer = () => {
 
                     <div className='w-full flex items-center justify-between'>
                         <p className='text-gray-200 text-xl font-semibold'>Total</p>
-                        <p className='text-gray-200 text-xl font-semibold'>&#x20A6;11.5</p>
+                        <p className='text-gray-200 text-xl font-semibold'>&#x20A6; {totalPrice + 50}</p>
                     </div>
 
                     {user && user ? (
 
                             <motion.button
+                            onClick={handleCheckout}
                             whileTap={{scale:0.8}}
                             type="button"
                             className='w-full p-2 rounded-full bg-orange-400 text-gray-50 text-lg my-2 hover:shadow-lg'
                             >
-                                Check Out
+
+                         
+                                   
+                               PROCEED TO CHECKOUT
+                          
                             </motion.button>
                     ) : (
 

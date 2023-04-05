@@ -40,6 +40,8 @@ const StateContextProvider = ({children}) => {
                 const response = await signInWithPopup(auth, provider);
     
                 const user = response.user;
+
+           
     
                 // // //getting user doc reference
                 const docRef = doc(db, 'users', user.uid);
@@ -48,7 +50,7 @@ const StateContextProvider = ({children}) => {
                 if(!docSnap.exists()){
                     //create user in database
                     await setDoc(doc(db, 'users', user.uid), {
-                        userId: response.user.providerData[0].uid,
+                        userId: response.user.uid,
                         username: response.user.providerData[0].displayName,
                         email: response.user.providerData[0].email,
                         photo: response.user.providerData[0].photoURL
@@ -100,7 +102,7 @@ const StateContextProvider = ({children}) => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setLoading(false);
           if (user) {
-            dispatch({ type: SET_USER, payload: user?.providerData[0] });
+            dispatch({ type: SET_USER, payload: user });
             setUid(user?.uid);
           } else {
             dispatch({ type: SIGN_OUT });
@@ -152,6 +154,10 @@ const StateContextProvider = ({children}) => {
             try {
                 // Check if the item already exists in the user's cart
                  const cartRef = collection(db, `cart ${uid}`);
+
+
+               
+
                 const cartQuery = query(
                     cartRef,
                     where("title", "==", foodItem.title)
@@ -231,6 +237,8 @@ const StateContextProvider = ({children}) => {
 
         const cartRef = collection(db, `cart ${uid}`);
       
+
+     
 
            const cartQuery = query(
             cartRef,
