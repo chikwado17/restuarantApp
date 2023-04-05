@@ -189,6 +189,7 @@ const StateContextProvider = ({children}) => {
                     ...Product
                 });
 
+                toast.success(`${foodItem.title} added to cart`);
 
             } catch (error) {
             console.error("Error adding item to cart:", error);

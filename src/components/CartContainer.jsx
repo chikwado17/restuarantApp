@@ -9,6 +9,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { app } from "../firebase";
 import { collection, doc, deleteDoc } from "firebase/firestore";
 import  { db } from '../firebase';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 
@@ -30,7 +31,7 @@ const CartContainer = () => {
 
 
     //function to delete single item from cart
-    const handleDelete = (cartItemId) => {
+    const handleDelete = (cartItemId, title) => {
         onAuthStateChanged(auth, (user) => {
 
             if(user) {
@@ -38,6 +39,7 @@ const CartContainer = () => {
                  deleteDoc(cartItemRef);
             }
 
+            toast.success(`${title} removed from cart`);
         })
     }
 
@@ -58,9 +60,6 @@ const CartContainer = () => {
     //charging payment
     const handleCheckout = async () => {
 
-       
-
-     
 
         const data = {
             user:uid,
@@ -119,7 +118,7 @@ const CartContainer = () => {
                             <div key={cartItem?.id} className='w-full p-1 px-2 rounded-lg bg-cartItem flex items-center gap-2'>
 
                                     <motion.div whileTap={{scale:0.75}}>
-                                        <MdDeleteOutline className="text-red-700 font-extrabold text-2xl" onClick={() => handleDelete(cartItem.id)} />
+                                        <MdDeleteOutline className="text-red-700 font-extrabold text-2xl" onClick={() => handleDelete(cartItem.id, cartItem.title)} />
                                     </motion.div>
 
                                 <img src={cartItem?.imageURL} alt={'item-img'} className="w-20 h-20 max-w-[60px] rounded-full object-contain" />
