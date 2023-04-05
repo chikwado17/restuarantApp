@@ -9,6 +9,7 @@ import { app } from "../firebase";
 import { FETCH_ITEMS, SET_CART_SHOW, SET_USER, SIGN_OUT } from './initialTypes';
 import { initialState } from './initialState';
 import  reducer  from './reducer';
+import { toast } from 'react-toastify';
 
 
 
@@ -193,7 +194,7 @@ const StateContextProvider = ({children}) => {
             console.error("Error adding item to cart:", error);
             }
         } else {
-            console.log("User is not logged in");
+            toast.error('In order to add items to your cart, please log in first. ');
         }
 
      }
