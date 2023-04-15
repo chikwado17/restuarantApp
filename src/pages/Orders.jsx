@@ -39,7 +39,7 @@ const Orders = () => {
   return (
     <div className='mt-20'>
         <h1 className='text-3xl border-b mb-2 pb-1 border-yellow-400'>Your Orders</h1>
-        <h2>{orders?.length} Orders</h2>
+        <h2 className='mt-5 mb-5'>{orders?.length} Orders</h2>
 
         {orders?.map(order => (
 
