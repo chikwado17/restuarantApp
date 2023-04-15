@@ -40,7 +40,7 @@ app.post("/create-checkout-session", async(req, res) => {
                 currency: "NGN",
                 product_data: {
                     name:item.title,
-                    images: [item.imageURL],
+                    images: [item.shorten],
                     metadata: {
                         id:item.id
                     }
@@ -122,8 +122,6 @@ app.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
 
     if(eventType === "checkout.session.completed") {
         stripe.customers.retrieve(data.customer).then(customer => {
-            console.log('Customer details', customer);
-            console.log("Data", data);
             createOrder(customer, data, res);
         });
     }

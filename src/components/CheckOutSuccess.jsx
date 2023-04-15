@@ -1,7 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+import { useStateValue } from '../context/StateContext';
+
 const CheckOutSuccess = () => {
+
+    const {uid} = useStateValue();
+
   return (
      <div className='scrollbar-none h-screen'>
            <div className="bg-gray-100 ">
@@ -16,9 +21,9 @@ const CheckOutSuccess = () => {
                         <p className="text-gray-600 my-2">Thank you for completing your secure online payment.</p>
                         <p> Have a great day!  </p>
                         <div className="py-10 text-center">
-                            <Link to="/" className="px-12 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3">
-                                GO BACK 
-                        </Link>
+                            <Link to={`/orders/${uid}`} className="px-12 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3">
+                                GO TO ORDERS 
+                            </Link>
                         </div>
                     </div>
                 </div>

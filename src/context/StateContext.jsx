@@ -4,7 +4,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider,onAuthStateChanged, signOu
 import { db } from '../firebase';
 import { doc, setDoc, getDoc, getDocs, collection, query, updateDoc, where, onSnapshot } from "firebase/firestore"; 
 import { app } from "../firebase";
-
+import { useNavigate } from 'react-router-dom';
 
 import { FETCH_ITEMS, SET_CART_SHOW, SET_USER, SIGN_OUT } from './initialTypes';
 import { initialState } from './initialState';
@@ -22,6 +22,8 @@ const StateContextProvider = ({children}) => {
     const [isMenu, setIsMenu] = useState(false);
     const [uid, setUid] = useState(null);
     const [userCart, setUserCart] = useState([]);
+
+    const navigate = useNavigate();
 
 
     const auth = getAuth(app);
@@ -83,6 +85,7 @@ const StateContextProvider = ({children}) => {
             });
             setUserCart([]);
             setUid(null);
+            navigate('/')
         }catch(error) {
             console.log(error);
          }

@@ -4,6 +4,7 @@ import Header from './components/Header';
 import MainContainer from './components/MainContainer';
 import CreateContainer from './components/CreateContainer';
 import CheckOutSuccess from './components/CheckOutSuccess';
+import Orders from './pages/Orders';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
                 <Route path='/*' element={<MainContainer />} />
                 <Route path='/createItem' element={<CreateContainer />}/>
                 <Route path='/checkout-success' element={<CheckOutSuccess/>} />
+                <Route path='/orders/:id' element={<Orders/>}/>
             </Routes>
         </main>
     </div>

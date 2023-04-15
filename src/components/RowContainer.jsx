@@ -28,7 +28,7 @@ const RowContainer = ({flag,data, scrollValue}) => {
                     whileHover={{scale:1.2}}
                     className='w-40 -mt-8 h-40 drop-shadow-2xl'
                     >
-                        <img  src={item.imageURL} className="w-full h-full object-contain" alt="" />
+                        <img  src={item.shorten} className="w-full h-full object-contain" alt="" />
                     </motion.div>
                 
                     <motion.div

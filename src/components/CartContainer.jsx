@@ -46,7 +46,7 @@ const CartContainer = () => {
     //getting the price from cartProducts in a separate array
     const totalAmount = userCart.map(cartProduct => {
         return cartProduct.price;
-    })
+    })  
 
     //reducing the price in a single value
     const reducerOfPrice = (accumulator, currentValue) => {
@@ -121,7 +121,7 @@ const CartContainer = () => {
                                         <MdDeleteOutline className="text-red-700 font-extrabold text-2xl" onClick={() => handleDelete(cartItem.id, cartItem.title)} />
                                     </motion.div>
 
-                                <img src={cartItem?.imageURL} alt={'item-img'} className="w-20 h-20 max-w-[60px] rounded-full object-contain" />
+                                <img src={cartItem?.shorten} alt={'item-img'} className="w-20 h-20 max-w-[60px] rounded-full object-contain" />
 
                                 {/* name section */}
                                 <div className='flex flex-col gap-2'>

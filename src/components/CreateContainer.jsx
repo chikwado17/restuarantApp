@@ -22,6 +22,9 @@ const CreateContainer = () => {
   const [msg, setMsg] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+
+  const [shortUrl, setShortUrl] = useState(null);
+
  
   // const {fetchFoodItems} = useStateValue();
 
@@ -59,8 +62,16 @@ const CreateContainer = () => {
     }, () => {
 
       getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
+
+
         
         setImageAsset(downloadURL);
+
+        //shortenURL function
+        shortenUrl(downloadURL, (shortenedUrl) => {
+          setShortUrl(shortenedUrl);
+        })
+
         setIsLoading(false);
         setFields(true);
         setMsg('Image uploaded successfully');
@@ -70,12 +81,49 @@ const CreateContainer = () => {
           setFields(false);
         }, 4000);
       });
-
-    } )
-    
-   
+    });
 
   }
+
+
+
+//shortenURL function
+  const shortenUrl = (longUrl, onSuccess, onFailure) => {
+    const apiKey = 'e950e26c29944316875b0396982c45b7a8f307b8';
+    const apiUrl = 'https://api-ssl.bitly.com/v4/shorten';
+
+    // Set up the request body
+    const requestBody = {
+      long_url: longUrl
+    };
+
+    // Set up the request headers
+    const requestHeaders = {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json'
+    };
+
+    // Make the API request using fetch
+    fetch(apiUrl, {
+      method: 'POST',
+      headers: requestHeaders,
+      body: JSON.stringify(requestBody)
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
+      }
+      return response.json();
+    }).then((data) => {
+      // Extract the shortened URL from the API response
+      const shortenedUrl = data.link;
+      onSuccess(shortenedUrl);
+    }).catch((error) => {
+      onFailure(error);
+    });
+  };
+
+
+
 
   //react firebase function to delete image from storage
   const deleteImage = (image) => {
@@ -117,7 +165,8 @@ const CreateContainer = () => {
             const data = {
                 id: `${Date.now()}`,
                 title: title,
-                imageURL: imageAsset,
+                // imageURL: imageAsset,
+                shorten:shortUrl,
                 category: category,
                 calories: calories,
                 // qty:1,
@@ -160,6 +209,8 @@ const CreateContainer = () => {
       }
 
     }
+
+
 
 
 
