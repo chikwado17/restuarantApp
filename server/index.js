@@ -92,7 +92,7 @@ app.post("/create-checkout-session", async(req, res) => {
 
 let endpointSecret;
 
-//endpointSecret = "whsec_3ea0e5a7dbe8ea5b04c1a6c68f5fa74ba0c427ca2d9b78fe08cbaafd9f1f6965";
+endpointSecret = "whsec_3ea0e5a7dbe8ea5b04c1a6c68f5fa74ba0c427ca2d9b78fe08cbaafd9f1f6965";
 
 app.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
     const sig = req.headers['stripe-signature'];
