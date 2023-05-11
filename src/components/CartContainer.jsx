@@ -67,7 +67,7 @@ const CartContainer = () => {
             totalPrice:totalPrice + 50
         }
 
-        axios.post(`http://localhost:4000/create-checkout-session`, { data }).then((res) => {
+        axios.post(`https://restaurants-app-xivs.vercel.app/create-checkout-session`, { data }).then((res) => {
             
 
         if(res.data.url) {
