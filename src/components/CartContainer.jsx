@@ -12,7 +12,7 @@ import  { db } from '../firebase';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-const baseURL = 'http://localhost:4000'
+const baseURL = 'https://restuarantapp-10311-default-rtdb.firebaseio.com'
 
 
 const CartContainer = () => {
