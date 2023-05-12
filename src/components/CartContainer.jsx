@@ -12,7 +12,7 @@ import  { db } from '../firebase';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-const baseURL = 'https://restuarantapp-10311-default-rtdb.firebaseio.com'
+const baseURL = 'https://restaurants-nr2iqxzdk-chikwado17.vercel.app'
 
 
 const CartContainer = () => {
