@@ -12,7 +12,7 @@ import  { db } from '../firebase';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-const baseURL = 'https://restaurants-nr2iqxzdk-chikwado17.vercel.app'
+const baseURL = process.env.REACT_APP_BASE_URL;
 
 
 const CartContainer = () => {
@@ -69,7 +69,12 @@ const CartContainer = () => {
             totalPrice:totalPrice + 50
         }
 
-        axios.post(`${baseURL}/create-checkout-session`, { data }).then((res) => {
+        axios.post(`${baseURL}/create-checkout-session`,  { data }, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+              },
+        }).then((res) => {
             
 
         if(res.data.url) {

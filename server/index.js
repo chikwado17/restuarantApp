@@ -21,6 +21,12 @@ app.use(cors());
 app.use(express.static("public"));
 app.use(express.json());
 
+app.use(cors({
+    origin:  process.env.CLIENT_URL,
+    allowedHeaders: ['Content-Type'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+}));
+
 
 
 app.post("/create-checkout-session", async(req, res) => {
@@ -262,4 +268,6 @@ app.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
 
 
 
-app.listen(4000, () => console.log('Listening on port 4000!'))
+app.listen(4000, () => {
+    console.log('Server listening on port 4000');
+});
