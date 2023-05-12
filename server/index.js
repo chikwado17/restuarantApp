@@ -17,15 +17,16 @@ admin.initializeApp({
  
 
 
-app.use(cors());
-app.use(express.static("public"));
-app.use(express.json());
+// app.use(cors());
 
 app.use(cors({
     origin:  process.env.CLIENT_URL,
     allowedHeaders: ['Content-Type'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
+
+app.use(express.static("public"));
+app.use(express.json());
 
 
 
