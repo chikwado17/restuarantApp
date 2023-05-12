@@ -12,6 +12,8 @@ import  { db } from '../firebase';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
+const baseURL = 'http://localhost:4000'
+
 
 const CartContainer = () => {
 
@@ -67,7 +69,7 @@ const CartContainer = () => {
             totalPrice:totalPrice + 50
         }
 
-        axios.post(`https://restaurants-app-xivs.vercel.app/create-checkout-session`, { data }).then((res) => {
+        axios.post(`${baseURL}/create-checkout-session`, { data }).then((res) => {
             
 
         if(res.data.url) {

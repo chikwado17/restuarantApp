@@ -92,7 +92,7 @@ app.post("/create-checkout-session", async(req, res) => {
 
 let endpointSecret;
 
-endpointSecret = "we_1N6VyICpKCtdLbBVPo3oZycW";
+//endpointSecret = "we_1N6VyICpKCtdLbBVPo3oZycW";
 
 app.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
     const sig = req.headers['stripe-signature'];
@@ -127,6 +127,88 @@ app.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
     }
     res.send().end();
   });
+
+
+
+
+
+// const endpointSecret = process.env.STRIPE_SIGNING_SECRET;
+
+// app.post('/webhook', express.raw({type: 'application/json'}), (request, response) => {
+//     const sig = request.headers['stripe-signature'];
+  
+//     let event;
+  
+//     try {
+//       event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+//     } catch (err) {
+//       response.status(400).send(`Webhook Error: ${err.message}`);
+//       return;
+//     }
+  
+//     // Handle the event
+//     switch (event.type) {
+//       case 'payment_intent.succeeded':
+//         const paymentIntentSucceeded = event.data.object;
+//         console.log(paymentIntentSucceeded);
+//         // Then define and call a function to handle the event payment_intent.succeeded
+//         break;
+//       // ... handle other event types
+//       default:
+//         console.log(`Unhandled event type ${event.type}`);
+//     }
+  
+//     // Return a 200 response to acknowledge receipt of the event
+//     response.send().end();
+//   });
+
+
+
+
+
+
+
+
+  
+//  let endpointSecret;
+// app.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
+//     const sig = req.headers['stripe-signature'];
+
+
+//     let eventType;
+//     let data;
+
+
+//     if(endpointSecret) {   
+//         let event;
+    
+//         try {
+//         event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+//         } catch (err) {
+//         res.status(400).send(`Webhook Error: ${err.message}`);
+//         return;
+//         }
+//         data = event.data.object;
+//         eventType = event.type;
+//     }else {
+
+//         data = req.body.data.object;
+//         eventType = req.body.type;
+//     }
+
+
+//     if(eventType === "checkout.session.completed") {
+//         stripe.customers.retrieve(data.customer).then(customer => {
+//             createOrder(customer, data, res);
+//         });
+//     }
+//     res.send().end();
+//   });
+
+
+
+
+
 
 
   //saving to our firestore database
